@@ -9,21 +9,22 @@ export default async function handler(req, res) {
 
     const { lat, lon } = req.query;
 
-    const googleRes = await fetch(
-      `https://solar.googleapis.com/v1/dataLayers:findClosest?key=${apiKey}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          location: {
-            latitude: parseFloat(lat),
-            longitude: parseFloat(lon),
-          },
-          requiredQuality: "HIGH",
-          view: "FULL_LAYERS",
-        }),
-      }
-    );
+const googleRes = await fetch(
+  `https://solar.googleapis.com/v1/dataLayers:findClosest?key=${apiKey}`,
+  {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      location: {
+        latitude: 37.7749,
+        longitude: -122.4194
+      },
+      requiredQuality: "HIGH",
+      view: "FULL_LAYERS"
+    })
+  }
+);
+
 
     const data = await googleRes.json();
     return res.status(googleRes.status).json(data);
