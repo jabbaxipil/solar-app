@@ -1,35 +1,30 @@
 export default async function handler(req, res) {
   try {
-    const apiKey = "AIzaSyB9t-BW1mYPQs71c4EzgbzsMUq_TA1h1xU";
+    const { lat, lon } = req.query;
+    const apiKey = "YOUR_API_KEY_HERE"; // TEMPORARY for testing
 
     if (!apiKey) {
-      console.error("❌ GOOGLE_SOLAR_API_KEY is undefined");
-      return res.status(500).json({ error: "GOOGLE_SOLAR_API_KEY is not set" });
+      return res.status(500).json({ error: "Missing API key" });
     }
 
-    const { lat, lon } = req.query;
+    const googleRes = await fetch(
+      `https://solar.googleapis.com/v1/buildingInsights:findClosest?location.latitude=${lat}&location.longitude=${lon}&requiredQuality=HIGH&key=${apiKey}`,
+      {
+        method: "GET"
+      }
+    );
 
-const googleRes = await fetch(
-  `https://solar.googleapis.com/v1/dataLayers:findClosest?key=${apiKey}`,
-  {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      location: {
-        latitude: 37.7749,
-        longitude: -122.4194
-      },
-      requiredQuality: "HIGH",
-      view: "FULL_LAYERS"
-    })
-  }
-);
-
+    const contentType = googleRes.headers.get("content-type") || "";
+    if (!contentType.includes("application/json")) {
+      const text = await googleRes.text();
+      console.error("Non-JSON response from Google:", text);
+      return res.status(googleRes.status).json({ error: "Non-JSON response", html: text });
+    }
 
     const data = await googleRes.json();
     return res.status(googleRes.status).json(data);
   } catch (err) {
-    console.error("Function Error:", err);
+    console.error("Solar API Proxy Error:", err);
     return res.status(500).json({ error: "Internal Server Error", details: err.message });
   }
 }
