@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
   try {
-    const apiKey = process.env.GOOGLE_SOLAR_API_KEY;
+    const apiKey = process.env.AIzaSyB9t-BW1mYPQs71c4EzgbzsMUq_TA1h1xU;
 
     if (!apiKey) {
       console.error("❌ GOOGLE_SOLAR_API_KEY is undefined");
