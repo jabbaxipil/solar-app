@@ -14,7 +14,8 @@ const DemoSolarApp = () => {
 
   useEffect(() => {
     const fetchRoofData = async () => {
-      const url = `https://solar.googleapis.com/v1/dataLayers:findClosest?key=${GOOGLE_API_KEY}`;
+      const url = `/api/solar?lat=${lat}&lon=${lon}`;
+;
 
       try {
         const response = await fetch(url, {
