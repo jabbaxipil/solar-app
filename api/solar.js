@@ -1,7 +1,7 @@
 export default async function handler(req, res) {
   try {
     const { lat, lon } = req.query;
-    const apiKey = "AIzaSyB9t-BW1mYPQs71c4EzgbzsMUq_TA1h1xU"; // TEMPORARY for testing
+    const apiKey = process.env.GOOGLE_SOLAR_API_KEY; // TEMPORARY for testing
 
     if (!apiKey) {
       return res.status(500).json({ error: "Missing API key" });
